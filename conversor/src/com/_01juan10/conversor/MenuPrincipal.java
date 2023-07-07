@@ -13,7 +13,9 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 
@@ -22,9 +24,9 @@ public class MenuPrincipal extends JFrame {
 	private JTextField moneda, monedaConvertida, temperatura, temperaturaConvertida;
 	private JButton botonConvertir;
 	private JComboBox selectorMonedas, selectorTemperaturas1, selectorTemperaturas2;
-	private String nombresMonedas[] = {"Dolar Estadounidense", "Dolar Canadiense", "Peso Argentino", "Sol Peruano", "Euro", "Libra"};
-	private String nombresTemperaturas[] = {"Grados Centigrados", "Grados Farenheit", "Grados Kelvin"};
-	private float multiplicadorMonedas[] = {};
+	private String nombresMonedas[] = {"Dolar Estadounidense", "Dolar Canadiense", "Peso Argentino", "Sol Peruano", "Euro", "Libra Esterlina"};
+	private String nombresTemperaturas[] = {"Grados Centigrados", "Grados Fahrenheit", "Grados Kelvin"};
+	private double multiplicadorMonedas[] = {0.058, 0.078, 15.12, 0.21, 0.053, 0.046};
 	private JLabel labelConvertirDe, labelConvertirDePesoMexicano, labelA, placeHolder;
 	
 	public MenuPrincipal() {
@@ -37,7 +39,7 @@ public class MenuPrincipal extends JFrame {
 		
 		labelConvertirDe = new JLabel(" Convertir de: ");
 		labelConvertirDePesoMexicano = new JLabel(" Convertir de Peso Mexicano A: ");
-		labelA = new JLabel(" A: ");
+		labelA = new JLabel("A: ",SwingConstants.CENTER);
 		placeHolder = new JLabel();
 		
 		moneda = new JTextField(1000);
@@ -49,7 +51,7 @@ public class MenuPrincipal extends JFrame {
 		temperaturaConvertida.setEnabled(false);
 		
 		botonConvertir = new JButton("HACER LA CONVERSION");
-		botonConvertir.setBackground(new Color(0,255,255));
+		botonConvertir.setBackground(new Color(100,100,100));
 		
 		selectorMonedas = new JComboBox(nombresMonedas);
 		selectorTemperaturas1 = new JComboBox(nombresTemperaturas);
@@ -170,8 +172,89 @@ public class MenuPrincipal extends JFrame {
 		gcon.gridwidth = 10;
 		gcon.gridheight = 1;
 		
+		ManagerButton managerButton = new ManagerButton();
+		botonConvertir.addActionListener(managerButton);
 		gbl.setConstraints(botonConvertir, gcon);
 		add(botonConvertir);
+	}
+	
+	private class ManagerButton implements ActionListener{
 		
+		public void actionPerformed(ActionEvent event) {
+			
+			if(event.getSource() == botonConvertir) {
+				//JOptionPane.showMessageDialog( null, "atjkjukuyku ", "!", JOptionPane.PLAIN_MESSAGE );
+				int i_selectorMonedas = selectorMonedas.getSelectedIndex(); 
+				int i_selectorTemperaturas1 = selectorTemperaturas1.getSelectedIndex(); 
+				int i_selectorTemperaturas2 = selectorTemperaturas2.getSelectedIndex();
+				double cantidadPesosMexicanos=0, cantidadTemperatura1=0, cantidadTemperatura2=0, cantidadTemperaturaConvertida=0;
+				try {
+					if(!moneda.getText().equals("")) {
+						cantidadPesosMexicanos = Double.parseDouble(moneda.getText());
+						monedaConvertida.setText(String.format ("%.2f", cantidadPesosMexicanos * multiplicadorMonedas[i_selectorMonedas]));
+					}
+					else {
+						monedaConvertida.setText("");
+					}
+					
+					
+				}
+				catch(NumberFormatException e) {
+					JOptionPane.showMessageDialog( null, "No se pudo procesar la cantidad de moneda", "!", JOptionPane.WARNING_MESSAGE );
+				}
+				try{
+					if(!temperatura.getText().equals("")) {
+						
+						cantidadTemperatura1 = Double.parseDouble(temperatura.getText());
+						
+						//conversor centigrados
+						if(i_selectorTemperaturas1 == 0 && i_selectorTemperaturas2 == 1) {
+							
+							cantidadTemperaturaConvertida = cantidadTemperatura1* (double)(1.8)+32; // centigrados a fahrenheit
+							
+						}
+						else if(i_selectorTemperaturas1 == 0 && i_selectorTemperaturas2 == 2) {
+							
+							cantidadTemperaturaConvertida = cantidadTemperatura1 + 273.15; // centigrados a kelvin
+						}
+						
+						//conversor fahrenheit
+						else if(i_selectorTemperaturas1 == 1 && i_selectorTemperaturas2 == 0) {
+							
+							cantidadTemperaturaConvertida = (cantidadTemperatura1 - 32) * (double)(0.55555); // fahrenheit a centigrados
+							
+						}
+						else if(i_selectorTemperaturas1 == 1 && i_selectorTemperaturas2 == 2) {
+							
+							cantidadTemperaturaConvertida = (cantidadTemperatura1 - 32) * (double)(0.55555) + 273.15; // fahrenheit a kelvin
+						}
+						
+						//conversor kelvin
+						else if(i_selectorTemperaturas1 == 2 && i_selectorTemperaturas2 == 0) {
+							
+							cantidadTemperaturaConvertida = cantidadTemperatura1 - 273.15; // kelvin a centigrados
+							
+						}
+						else if(i_selectorTemperaturas1 == 2 && i_selectorTemperaturas2 == 1) {
+							
+							cantidadTemperaturaConvertida = (cantidadTemperatura1 - 273.15) * 1.8 + 32; // kelvin a fahrenheit 
+						}
+						else {
+							cantidadTemperaturaConvertida = cantidadTemperatura1;
+						}
+						
+						temperaturaConvertida.setText(String.format ("%.2f",  cantidadTemperaturaConvertida ));
+					}
+					else {
+						temperaturaConvertida.setText("");
+					}
+				}
+				catch(NumberFormatException e) {
+					JOptionPane.showMessageDialog( null, "No se pudo procesar la cantidad de temperatura", "!", JOptionPane.WARNING_MESSAGE );
+				}
+			}
+			
+			
+		}
 	}
 }

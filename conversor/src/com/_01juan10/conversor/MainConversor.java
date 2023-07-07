@@ -30,7 +30,7 @@ public class MainConversor {
 		MenuPrincipal conversor = new MenuPrincipal();
 		conversor.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		
-		conversor.setSize( tamanoPantalla.width/4, tamanoPantalla.height/4 );
+		conversor.setSize( tamanoPantalla.width/3, tamanoPantalla.height/4 );
 		conversor.setVisible( true );
 		conversor.setResizable( true );
 		conversor.setLocationRelativeTo(null);
