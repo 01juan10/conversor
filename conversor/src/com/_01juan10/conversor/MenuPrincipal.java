@@ -31,7 +31,7 @@ public class MenuPrincipal extends JFrame {
 	
 	public MenuPrincipal() {
 		
-		super("Conversor de moneda y temperatura");
+		super("Conversor de pesos mexicanos y temperatura");
 		
 		Toolkit toolkitIcono = Toolkit.getDefaultToolkit();
 		Image ventanaIcono = toolkitIcono.getImage("./Imagenes/icono-github.png");
@@ -40,15 +40,16 @@ public class MenuPrincipal extends JFrame {
 		labelConvertirDe = new JLabel(" Convertir de: ");
 		labelConvertirDePesoMexicano = new JLabel(" Convertir de Peso Mexicano A: ");
 		labelA = new JLabel("A: ",SwingConstants.CENTER);
-		placeHolder = new JLabel();
+		placeHolder = new JLabel("* Conversiones actualizadas al 5 de Julio del 2023.");
+		placeHolder.setForeground(Color.RED);
 		
 		moneda = new JTextField(1000);
 		monedaConvertida = new JTextField(1000);
-		monedaConvertida.setEnabled(false);
+		monedaConvertida.setEditable(false);
 		
 		temperatura = new JTextField(1000);
 		temperaturaConvertida = new JTextField(1000);
-		temperaturaConvertida.setEnabled(false);
+		temperaturaConvertida.setEditable(false);
 		
 		botonConvertir = new JButton("HACER LA CONVERSION");
 		botonConvertir.setBackground(new Color(100,100,100));
@@ -192,6 +193,7 @@ public class MenuPrincipal extends JFrame {
 					if(!moneda.getText().equals("")) {
 						cantidadPesosMexicanos = Double.parseDouble(moneda.getText());
 						monedaConvertida.setText(String.format ("%.2f", cantidadPesosMexicanos * multiplicadorMonedas[i_selectorMonedas]));
+						monedaConvertida.setForeground(Color.BLUE);
 					}
 					else {
 						monedaConvertida.setText("");
@@ -244,6 +246,7 @@ public class MenuPrincipal extends JFrame {
 						}
 						
 						temperaturaConvertida.setText(String.format ("%.2f",  cantidadTemperaturaConvertida ));
+						temperaturaConvertida.setForeground(Color.BLUE);
 					}
 					else {
 						temperaturaConvertida.setText("");
